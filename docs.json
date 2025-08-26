@@ -48,6 +48,12 @@
                 ]
               },
               {
+                "group": "Coding Agents",
+                "pages": [
+                  "providers/kilo-code"
+                ]
+              },
+              {
                 "group": "CLI",
                 "pages": [
                   "providers/claude-code"
