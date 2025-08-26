@@ -81,7 +81,8 @@
           {
             "group": "Opensource",
             "pages": [
-              "opensource/contributing"
+              "opensource/contributing",
+              "opensource/changelog"
             ]
           }
         ]
