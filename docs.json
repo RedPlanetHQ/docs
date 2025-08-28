@@ -73,7 +73,8 @@
             "pages": [
               "integrations/overview",
               "integrations/user_rules",
-              "integrations/linear"
+              "integrations/linear",
+              "integrations/github"
             ]
           },
           {
