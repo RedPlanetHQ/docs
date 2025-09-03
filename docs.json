@@ -63,7 +63,9 @@
                 "group": "Desktop and Webapp",
                 "pages": [
                   "providers/browser-extension",
-                  "providers/claude"
+                  "providers/claude",
+                  "providers/obsidian"
+
                 ]
               }
             ]
