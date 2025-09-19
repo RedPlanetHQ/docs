@@ -113,7 +113,8 @@
               "POST /api/v1/add",
               "GET /api/v1/episodes/{episodeId}/facts",
               "GET /api/v1/logs",
-              "GET /api/v1/ingestion-queue/status"
+              "GET /api/v1/logs/{logId}",
+              "DELETE /api/v1/logs/{logId}"
             ]
           },
           {
