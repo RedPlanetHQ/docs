@@ -1,0 +1,96 @@
+---
+title: "Codex CLI"
+description: "Connect your Codex CLI to CORE's memory system"
+---
+
+### Prerequisites
+
+- Codex CLI installed
+- CORE account - [Sign up at core.heysol.ai](https://core.heysol.ai)
+
+### Step 1: Install Codex
+
+If you haven't already installed Codex, install it first. Once installed, proceed to the next step.
+
+### Step 2: Check for config.toml file
+
+First, check if the config file exists in your Codex directory:
+
+```bash
+ls ~/.codex/
+```
+
+### Step 3: Create config file (if needed)
+
+If the file doesn't exist, create it using this command:
+
+```bash
+touch ~/.codex/config.toml
+```
+
+### Step 4: Open config file in editor
+
+Open the config.toml file in your editor:
+
+```bash
+code ~/.codex/config.toml -r
+```
+
+### Step 5: Add CORE MCP server configuration
+
+Add the following configuration to your config file:
+
+```toml
+[mcp_servers.corememory]
+command = "npx"
+args = ["-y", "mcp-remote", "https://core.heysol.ai/api/v1/mcp?source=codex", "--header", "Authorization:${AUTH_HEADER}"]
+env = { "AUTH_HEADER" = "Bearer {GET API KEY FROM CORE DASHBOARD}" }
+```
+
+### Step 6: Get API key from CORE dashboard
+
+1. Log into your CORE dashboard at [core.heysol.ai](https://core.heysol.ai)
+2. Navigate to **Settings** (bottom left)
+   ![Claude Settings](/images/core-settings.png)
+3. Go to **API Key** → **Generate new key** → Name it "codex"
+   ![Claude Settings](/images/create-api-key.png)
+4. Replace `{GET API KEY FROM CORE DASHBOARD}` in the config with your actual API key
+
+What this does: This establishes the connection between Codex and CORE's memory system using OAuth2 Bearer token authentication.
+
+### Step 7: Authenticate the MCP
+
+1. Start Codex CLI
+2. The MCP server should now be available
+3. Follow any authentication prompts that appear
+4. Grant permissions when prompted to allow Codex access to your CORE memory
+
+### Step 8: Test the connection
+
+Test your setup by asking Codex to summarize your codebase architecture and add it back to memory:
+
+```bash
+# Example: Ask Codex to analyze and remember your project
+codex "Can you summarize our codebase architecture and store this summary in CORE memory for future reference?"
+```
+
+### Troubleshooting
+
+**Connection Issues:**
+
+- Ensure you're logged into your CORE account in the browser
+- Check that the config.toml file is properly formatted
+- Verify your API key is correct and hasn't expired
+- Restart Codex CLI if authentication seems stuck
+
+**Authentication Issues:**
+
+- Make sure the Bearer token format is correct in your config
+- Check that CORE permissions are properly granted
+- Try regenerating your API key if authentication fails
+
+### Need Help?
+
+Join our [Discord community](https://discord.gg/YGUZcvDjUa) and ask questions in the **#core-support** channel.
+
+Our team and community members are ready to help you get the most out of CORE's memory capabilities.
