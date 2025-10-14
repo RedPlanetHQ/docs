@@ -43,7 +43,7 @@ CORE offers two deployment approaches depending on your needs:
 
 > **Prerequisites:**  
 > Before starting any deployment, ensure you have your `OPENAI_API_KEY` ready. This is required for AI functionality in CORE.  
-> You must add your `OPENAI_API_KEY` to the `core/hosting/docker/.env` file before starting the services.
+> You must add your `OPENAI_API_KEY` to the `core/.env` file before starting the services.
 
 ### Combined Setup
 
@@ -53,12 +53,28 @@ For self deployment with both CORE and Trigger.dev running together:
    ```bash
    # Clone the repository
    git clone https://github.com/RedPlanetHQ/core.git
-   cd core/hosting/docker
+   cd core
    ```
 
 2. Start the services:
    ```bash
    docker compose up -d
+   ```
+
+### AWS Deployment
+
+For AWS-specific deployments, use the dedicated AWS Docker Compose configuration:
+
+1. Clone core repository
+   ```bash
+   # Clone the repository
+   git clone https://github.com/RedPlanetHQ/core.git
+   cd core
+   ```
+
+2. Start the AWS services:
+   ```bash
+   docker compose -f hosting/docker-compose.aws.yaml up -d
    ```
 
 ## Next Steps
