@@ -8,6 +8,103 @@ description: "Connect your Claude Code CLI to CORE's memory system"
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed
 - CORE account - [Sign up at core.heysol.ai](https://core.heysol.ai)
 
+## Choose Your Setup Method
+
+There are two ways to connect CORE with Claude Code:
+
+| Feature | Method 1: Plugin (Recommended) | Method 2: Manual MCP Setup |
+|---------|-------------------------------|---------------------------|
+| Setup Time | ~2 minutes | ~10-15 minutes |
+| Configuration | Automatic | Manual |
+| Sub-agents | Auto-configured | Manual creation required |
+| Hooks | Auto-configured | Manual configuration required |
+| Best For | Most users | Advanced customization |
+
+---
+
+## Method 1: Install via Plugin (Recommended)
+
+The CORE plugin for Claude Code simplifies setup by automatically configuring memory search, memory ingest agents, and hooks with a single installation.
+
+### What You Get Automatically
+
+- **Memory search agent**: Automatically searches CORE memory for relevant context at conversation start
+- **Memory ingest agent**: Automatically stores conversation summaries after each interaction
+- **Session hooks**: Triggers that ensure memory operations happen seamlessly
+- **All MCP tools**: Full access to CORE's memory capabilities
+- **Codebase initialization**: Easy command to summarize and add your entire codebase to memory
+
+### Installation Steps
+
+**Step 1: Add the CORE plugin marketplace**
+
+Open Claude Code in your terminal and run:
+
+```bash
+/plugin marketplace add https://github.com/RedPlanetHQ/redplanethq-marketplace.git
+```
+
+This is a one-time setup that gives you access to CORE plugins.
+
+**Step 2: Install the CORE memory plugin**
+
+```bash
+/plugin install core-memory@redplanethq
+```
+
+This installs the plugin with all necessary agents and hooks pre-configured.
+
+**Step 3: Authenticate with CORE**
+
+1. Type `/mcp` in Claude Code
+2. Select `plugin:core-memory:core-memory` from the list
+3. Click "Authenticate"
+4. This will open your default web browser
+5. Log in to your CORE account (or sign up if you haven't)
+6. Grant permissions when prompted
+
+**Step 4: Initialize your codebase memory**
+
+After setup, use this command to summarize your whole codebase and add it to CORE memory for future recall:
+
+```bash
+/core-memory:init
+```
+
+This command analyzes your project and creates a comprehensive summary in your CORE memory, making it available for all future conversations.
+
+### How It Works
+
+Once installed, the plugin works automatically:
+
+- **At session start**: Memory search agent retrieves relevant context from your CORE memory
+- **During conversation**: Claude has access to your full memory graph and codebase knowledge
+- **After interaction**: Memory ingest agent stores the conversation summary
+- **Across tools**: Your memory is shared across Claude Code, Cursor, ChatGPT, and other CORE-connected tools
+
+You don't need to manually trigger memory operations—the plugin handles everything!
+
+### Verify Your Setup
+
+1. **Check MCP connection**: Type `/mcp` - you should see `plugin:core-memory:core-memory` listed as "Connected"
+
+2. **Test memory search**: Start a new conversation and ask:
+   ```
+   Can you search my memory for [something you've previously stored]?
+   ```
+
+3. **Test codebase recall**: After running `/core-memory:init`, ask Claude about your project structure or architecture
+
+The memory operations should happen automatically, and your conversations will be stored without any manual intervention.
+
+---
+
+## Method 2: Manual MCP Setup (Advanced)
+
+This method gives you full control over the configuration but requires manually creating sub-agents and hooks. Choose this if you need custom agent behavior or specific hook configurations.
+
+**Note**: If you've already installed via the plugin (Method 1), you don't need this manual setup. The plugin handles all of this automatically.
+
 ### Step 1: Install the CORE MCP Server
 
 Run this command in your terminal to connect CORE with Claude Code:
@@ -43,20 +140,20 @@ Test your setup to ensure everything is working correctly:
 2. **Check connection status**: Type /mcp - core-memory should show "Connected"
 3. **Test operations**: Ask Claude to store and retrieve information across sessions
 
-### Enable Automatic Memory Integration (Recommended)
+### Step 5: Enable Automatic Memory Integration
 
-Configure Claude Code to automatically search and store memories for seamless project continuity:
+With manual MCP setup, you need to manually configure sub-agents and hooks for automatic memory search and ingest. The plugin (Method 1) handles this automatically.
 
 1. **Create configuration structure** in your project root:
    .claude/agents/
 
 2. **Set up memory search agent** - Create `.claude/agents/memory-search.md`
 
-   ```
+   ```markdown
    ---
    name: memory-search
    description: AUTOMATICALLY invoke for memory searches. Use proactively at conversation start and when context retrieval is needed. Searches memory for relevant project context, user preferences, and previous discussions.
-   tools: mcp__core-memory__memory_search
+   tools: mcp__plugin_core-memory_core-memory__memory_search
    model: sonnet
    color: green
    ---
@@ -125,16 +222,15 @@ Configure Claude Code to automatically search and store memories for seamless pr
    - User preferences and patterns discovered
 
    Your goal is to ensure every interaction has full context from previous conversations, maintaining seamless continuity across all Claude Code sessions.
-
    ```
 
 3. **Set up memory ingest agent** - Create `.claude/agents/memory-ingest.md`
 
-   ```
+   ```markdown
    ---
    name: memory-ingest
    description: AUTOMATICALLY invoke after completing interactions. Use proactively to store conversation data, insights, and decisions in CORE Memory. Essential for maintaining continuity across sessions.
-   tools: mcp__core-memory__memory_ingest
+   tools: mcp__plugin_core-memory_core-memory__memory_ingest
    model: sonnet
    color: purple
    ---
@@ -262,7 +358,7 @@ Configure Claude Code to automatically search and store memories for seamless pr
 
 4. **Configure session hooks** - Add automation triggers to `settings.local.json`:
 
-   ```
+   ```json
    {
    "hooks": {
     "SessionStart": [
@@ -290,7 +386,19 @@ Configure Claude Code to automatically search and store memories for seamless pr
    }
    ```
 
-### Troubleshooting
+### Why Manual Setup?
+
+Choose this method if you need:
+- Custom agent behavior or prompts
+- Specific hook configurations
+- Integration with existing Claude Code workflows
+- Fine-grained control over memory operations
+
+**Important**: The plugin method (Method 1) handles all of this automatically—sub-agents, hooks, and configurations. Use manual setup only if you need advanced customization beyond what the plugin provides.
+
+---
+
+## Troubleshooting
 
 **Connection Issues:**
 
@@ -298,7 +406,28 @@ Configure Claude Code to automatically search and store memories for seamless pr
 - Check that the MCP server URL is correctly formatted
 - Restart Claude Code if authentication seems stuck
 
-### Need Help?
+**Plugin vs MCP Setup:**
+
+- If you installed via plugin, you don't need manual MCP setup
+- Don't mix methods - choose one approach
+- Plugin automatically handles agents and hooks
+
+**Memory Not Working:**
+
+- Verify connection with `/mcp` command
+- Check that `plugin:core-memory:core-memory` (plugin) or `core-memory` (manual) shows as "Connected"
+- Test with explicit memory search request first
+- Run `/core-memory:init` to initialize your codebase memory (plugin method only)
+
+**Plugin Installation Issues:**
+
+- Make sure you've added the marketplace first with the correct URL
+- Use the exact plugin name: `core-memory@redplanethq`
+- Check your internet connection during installation
+
+---
+
+## Need Help?
 
 Join our [Discord community](https://discord.gg/YGUZcvDjUa) and ask questions in the **#core-support** channel.
 
